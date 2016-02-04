@@ -17,8 +17,8 @@ import java.util.Calendar;
 public class CustomAdapter extends ArrayAdapter<String> {
 
 
-    public CustomAdapter(Context context, ArrayList<String> zzz) {
-        super(context, R.layout.custom_row , zzz);
+    public CustomAdapter(Context context, ArrayList<String> myArrayList) {
+        super(context, R.layout.custom_row , myArrayList);
     }
 
     @Override
@@ -26,12 +26,12 @@ public class CustomAdapter extends ArrayAdapter<String> {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View customView = layoutInflater.inflate(R.layout.custom_row, parent, false);
 
-        String zzzFood = getItem(position);
+        String title = getItem(position);
 
         TextView titleTV = (TextView) customView.findViewById(R.id.reminderTitle);
         TextView timeTV = (TextView) customView.findViewById(R.id.reminderTime);
 
-        titleTV.setText(zzzFood);
+        titleTV.setText(title);
         Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR);
         int minuttes = c.get(Calendar.MINUTE);
