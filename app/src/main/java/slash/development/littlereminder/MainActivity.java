@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> remindertitles;
     private int numberofelements = 0;
 
+    //private class thisClass = getClas
 
 
     @Override
@@ -48,15 +49,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
-                numberofelements++;
+                Intent intent = new Intent(context, AddReminderActivity.class);
+                startActivity(intent);
+                //setContentView(R.layout.activity_add_reminder);
+                /*numberofelements++;
                 remindertitles.add("Reminder " + numberofelements);
                 ListAdapter myAdapter = new CustomAdapter(context, remindertitles);
                 ListView myListView = (ListView) findViewById(R.id.reminderlistView);
                 myListView.setAdapter(myAdapter);
 
-                Toast.makeText(getApplicationContext(), "Reminder " + numberofelements, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Reminder " + numberofelements, Toast.LENGTH_LONG).show();*/
 
             }
         });
