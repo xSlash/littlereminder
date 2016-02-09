@@ -14,10 +14,10 @@ import java.util.Calendar;
 /**
  * Created by Martin on 04-02-2016.
  */
-public class CustomAdapter extends ArrayAdapter<String> {
+public class CustomAdapter extends ArrayAdapter<ReminderObject> {
 
 
-    public CustomAdapter(Context context, ArrayList<String> myArrayList) {
+    public CustomAdapter(Context context, ArrayList<ReminderObject> myArrayList) {
         super(context, R.layout.custom_row , myArrayList);
     }
 
@@ -26,17 +26,18 @@ public class CustomAdapter extends ArrayAdapter<String> {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View customView = layoutInflater.inflate(R.layout.custom_row, parent, false);
 
-        String title = getItem(position);
+        String title = getItem(position).getTitle();
+        String timer = Integer.toString(getItem(position).getHour()) + ":" + Integer.toString(getItem(position).getMinute());
 
         TextView titleTV = (TextView) customView.findViewById(R.id.reminderTitle);
         TextView timeTV = (TextView) customView.findViewById(R.id.reminderTime);
 
         titleTV.setText(title);
-        Calendar c = Calendar.getInstance();
+        /*Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR);
         int minuttes = c.get(Calendar.MINUTE);
-        String completeAlarm = Integer.toString(hour) + ":" + Integer.toString(minuttes);
-        timeTV.setText(completeAlarm);
+        String completeAlarm = Integer.toString(hour) + ":" + Integer.toString(minuttes);*/
+        timeTV.setText(timer);
 
         return customView;
     }
