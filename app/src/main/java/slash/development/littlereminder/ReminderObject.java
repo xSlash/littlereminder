@@ -10,6 +10,15 @@ public class ReminderObject {
     private String Title;
     private int Hour;
     private int Minute;
+    private String completeTime;
+
+    public String getCompleteTime() {
+        return completeTime;
+    }
+
+    public void setCompleteTime(String completeTime) {
+        this.completeTime = completeTime;
+    }
 
     public String getTitle() {
         return Title;
@@ -36,10 +45,11 @@ public class ReminderObject {
     }
 
 
-    public ReminderObject(String title, int hour, int minute) {
+    public ReminderObject(String title, int hour, int minute, String completetime) {
 
         this.Title = title;
         this.Hour = hour;
         this.Minute = minute;
+        this.completeTime = completetime;
     }
 }

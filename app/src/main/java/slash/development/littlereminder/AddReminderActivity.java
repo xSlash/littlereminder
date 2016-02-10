@@ -59,7 +59,10 @@ public class AddReminderActivity extends AppCompatActivity {
                 String title = textView.getText().toString();
                 //textView.setText(hour + ":" + min);
 
-                ReminderObject reminderObject = new ReminderObject(title, hour, min);
+                String completeTime = new DecimalFormat("00").format(hour) + ":" + new DecimalFormat("00").format(min);
+                //String minuteFormat = new DecimalFormat("00").format(min);
+
+                ReminderObject reminderObject = new ReminderObject(title, hour, min, completeTime);
 
                 //timep.setMinute(min);
 
@@ -105,10 +108,32 @@ public class AddReminderActivity extends AppCompatActivity {
             arrRO = gson.fromJson(json, type);
         }
 
+        for (int i = 0; i < arrRO.size(); i++) {
+            if (ro.getHour() < arrRO.get(i).getHour()) {
+                arrRO.add(i, ro);
+                break;
+            }
+            else if (ro.getHour() == arrRO.get(i).getHour()) {
+                if (ro.getMinute() < arrRO.get(i).getMinute()) {
+                    arrRO.add(i, ro);
+                    break;
+                }
+            }
+
+            if (i == (arrRO.size()-1)) {
+                arrRO.add(ro);
+            }
+        }
+
+        //If it's the first alarm
+        if (arrRO.size() == 0) {
+            arrRO.add(ro);
+        }
+
 
         //Save objects
 
-        arrRO.add(ro);
+        //arrRO.add(ro);
 
         SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
         Gson gsonsave = new Gson();
@@ -116,10 +141,10 @@ public class AddReminderActivity extends AppCompatActivity {
         prefsEditor.putString("MyObject", jsonsave);
         prefsEditor.commit();
 
-        String hourFormat = new DecimalFormat("00").format(ro.getHour());
-        String minuteFormat = new DecimalFormat("00").format(ro.getMinute());
+        /*String hourFormat = new DecimalFormat("00").format(ro.getHour());
+        String minuteFormat = new DecimalFormat("00").format(ro.getMinute());*/
 
-        Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + hourFormat + ":" + minuteFormat, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + ro.getCompleteTime(), Toast.LENGTH_LONG).show();
 
     }
 
