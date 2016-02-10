@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         ListView myListView = (ListView) findViewById(R.id.reminderlistView);
         myListView.setAdapter(myAdapter);
 
-        Toast.makeText(getApplicationContext(), "Reminder " + arrRO.size(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "Reminder " + arrRO.size(), Toast.LENGTH_LONG).show();
 
     }
 
@@ -133,5 +133,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
+        ArrayList<ReminderObject> arrRO = new ArrayList<ReminderObject>();
+
+        //Load objects
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
+        Gson gson = new Gson();
+        String json = appSharedPrefs.getString("MyObject", "");
+
+        Type type = new TypeToken<ArrayList<ReminderObject>>(){}.getType();
+
+        //If first time, we don't have an object, and it will be null
+        if (gson.fromJson(json, type) == null) {
+
+        }
+        //Else, assign it to arrRO
+        else {
+            arrRO = gson.fromJson(json, type);
+        }
+
+        ListAdapter myAdapter = new CustomAdapter(context, arrRO);
+        ListView myListView = (ListView) findViewById(R.id.reminderlistView);
+        myListView.setAdapter(myAdapter);
+
+        //Toast.makeText(getApplicationContext(), "Reminder " + arrRO.size(), Toast.LENGTH_LONG).show();
+
     }
 }

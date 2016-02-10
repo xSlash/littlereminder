@@ -10,7 +10,6 @@ public class ReminderObject {
     private String Title;
     private int Hour;
     private int Minute;
-    //private Time reminderTimer;
 
     public String getTitle() {
         return Title;
@@ -38,7 +37,7 @@ public class ReminderObject {
 
 
     public ReminderObject(String title, int hour, int minute) {
-        //this.reminderTimer = time;
+
         this.Title = title;
         this.Hour = hour;
         this.Minute = minute;

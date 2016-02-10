@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/titleEditText"
-        android:text="Title"/>
+        android:text="Title"
+        android:singleLine="true"/>
 
     <TimePicker
         android:layout_width="wrap_content"

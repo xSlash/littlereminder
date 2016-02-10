@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.sql.Time;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class AddReminderActivity extends AppCompatActivity {
@@ -55,9 +56,10 @@ public class AddReminderActivity extends AppCompatActivity {
 
 
                 TextView textView = (TextView) findViewById(R.id.titleEditText);
-                textView.setText(hour + ":" + min);
+                String title = textView.getText().toString();
+                //textView.setText(hour + ":" + min);
 
-                ReminderObject reminderObject = new ReminderObject("zz", hour, min);
+                ReminderObject reminderObject = new ReminderObject(title, hour, min);
 
                 //timep.setMinute(min);
 
@@ -114,7 +116,10 @@ public class AddReminderActivity extends AppCompatActivity {
         prefsEditor.putString("MyObject", jsonsave);
         prefsEditor.commit();
 
-        Toast.makeText(this, "Alarm array size: " + arrRO.size(), Toast.LENGTH_LONG).show();
+        String hourFormat = new DecimalFormat("00").format(ro.getHour());
+        String minuteFormat = new DecimalFormat("00").format(ro.getMinute());
+
+        Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + hourFormat + ":" + minuteFormat, Toast.LENGTH_LONG).show();
 
     }
 
