@@ -1,5 +1,9 @@
 package slash.development.littlereminder;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,10 +25,12 @@ import java.lang.reflect.Type;
 import java.sql.Time;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddReminderActivity extends AppCompatActivity {
 
     private TimePicker timep;
+
     //private ArrayList<ReminderObject> arrRO = new ArrayList<ReminderObject>();
 
     @Override
@@ -64,26 +70,10 @@ public class AddReminderActivity extends AppCompatActivity {
 
                 ReminderObject reminderObject = new ReminderObject(title, hour, min, completeTime);
 
-                //timep.setMinute(min);
-
-                loadObjects();
                 saveObjects(reminderObject);
 
             }
         });
-
-
-    }
-
-    private void loadObjects() {
-
-        /*SharedPreferences appSharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this.getApplicationContext());
-        Gson gson = new Gson();
-        String json = appSharedPrefs.getString("MyObject", "");
-        arrRO = new ArrayList<ReminderObject>();
-        Type type = new TypeToken<ArrayList<ReminderObject>>(){}.getType();
-        arrRO = gson.fromJson(json, type);*/
 
     }
 
@@ -122,6 +112,7 @@ public class AddReminderActivity extends AppCompatActivity {
 
             if (i == (arrRO.size()-1)) {
                 arrRO.add(ro);
+                break;
             }
         }
 
@@ -141,8 +132,27 @@ public class AddReminderActivity extends AppCompatActivity {
         prefsEditor.putString("MyObject", jsonsave);
         prefsEditor.commit();
 
-        /*String hourFormat = new DecimalFormat("00").format(ro.getHour());
-        String minuteFormat = new DecimalFormat("00").format(ro.getMinute());*/
+
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, ro.getHour());
+        calendar.set(Calendar.MINUTE, ro.getMinute());
+        calendar.set(Calendar.SECOND, 0);
+        //calendar.set(Calendar.MILLISECOND, 0);
+
+        if(calendar.before(now)){
+            calendar.add(Calendar.DATE, 1);
+        }
+
+        Intent myIntent = new Intent(AddReminderActivity.this, AlarmReceiver.class);
+        PendingIntent  pendingIntent = PendingIntent.getBroadcast(AddReminderActivity.this, 0, myIntent, 0);
+
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        //manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        //manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, AlarmManager.INTERVAL_DAY, pendingIntent);
 
         Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + ro.getCompleteTime(), Toast.LENGTH_LONG).show();
 
