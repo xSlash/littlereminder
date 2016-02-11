@@ -9,12 +9,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -100,9 +102,36 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ListAdapter myAdapter = new CustomAdapter(context, arrRO);
-        ListView myListView = (ListView) findViewById(R.id.reminderlistView);
+        final ListView myListView = (ListView) findViewById(R.id.reminderlistView);
         myListView.setAdapter(myAdapter);
 
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //CHANGE to add view under the clicked item.
+                //parent.get
+
+                Toast.makeText(context, "AdapterView: " + parent +  ". View: " + view + ". Item: " + position, Toast.LENGTH_LONG).show();
+            }
+
+        });
+
+        /*myListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        //parent.addView(findViewById(R.id.deleteButton));
+                        //arrRO.add(position, new ReminderObject("Test", 1,1, "1-1-1-1"));
+
+                        Toast.makeText(context, "Item: " + position, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );*/
         //Toast.makeText(getApplicationContext(), "Reminder " + arrRO.size(), Toast.LENGTH_LONG).show();
 
     }

@@ -40,6 +40,7 @@ public class CustomAdapter extends ArrayAdapter<ReminderObject> {
         String completeAlarm = Integer.toString(hour) + ":" + Integer.toString(minuttes);*/
         timeTV.setText(timer);
 
+
         return customView;
     }
 }
