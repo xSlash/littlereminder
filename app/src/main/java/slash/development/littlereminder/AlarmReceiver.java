@@ -23,25 +23,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         //MainActivity.getTextView2().setText("Enough Rest. Do Work Now!");
 
-        /*NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        Notification notification = intent.getParcelableExtra(NOTIFICATION);
-        int id = intent.getIntExtra(NOTIFICATION_ID, 0);
-        notificationManager.notify(id, notification);*/
-
-        /*NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
-        mBuilder.setSmallIcon(R.drawable.notification_icon);
-        mBuilder.setContentTitle("Notification Alert, Click Me!");
-        mBuilder.setContentText("Hi, This is Android Notification Detail!");
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-// notificationID allows you to update the notification later on.
-        mNotificationManager.notify(0, mBuilder.build());*/
-
-
-        //Vogella edit
-
         Long tsLong = System.currentTimeMillis()/1000;
         String ts = tsLong.toString();
 
@@ -56,7 +37,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         notificationManager.notify(0, noti);
 
-
+        //Alarm sound
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
         ringtone.play();
