@@ -39,7 +39,7 @@
             android:layout_marginRight="25dp"
             android:src="@drawable/plus"
             android:id="@+id/imageButton"
-            app:backgroundTint="#2196F3"
+            app:backgroundTint="#4DB6AC"
             app:fabSize="normal"
             />
 

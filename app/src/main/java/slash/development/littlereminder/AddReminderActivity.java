@@ -150,6 +150,10 @@ public class AddReminderActivity extends AppCompatActivity {
         Intent myIntent = new Intent(AddReminderActivity.this, AlarmReceiver.class);
         PendingIntent  pendingIntent = PendingIntent.getBroadcast(AddReminderActivity.this, 0, myIntent, 0);
 
+        //PendingIntent.getBroadcast(,)
+
+        //PendingIntent.getBroadcast(,)
+
         manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         //manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         //manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, AlarmManager.INTERVAL_DAY, pendingIntent);

@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -101,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
             arrRO = gson.fromJson(json, type);
         }
 
-        ListAdapter myAdapter = new CustomAdapter(context, arrRO);
-        final ListView myListView = (ListView) findViewById(R.id.reminderlistView);
+        ExpandableListAdapter myAdapter = new ExpandableListAdapter(context, arrRO);
+        final ExpandableListView myListView = (ExpandableListView) findViewById(R.id.reminderlistView);
         myListView.setAdapter(myAdapter);
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -182,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
             arrRO = gson.fromJson(json, type);
         }
 
-        ListAdapter myAdapter = new CustomAdapter(context, arrRO);
-        ListView myListView = (ListView) findViewById(R.id.reminderlistView);
+        ExpandableListAdapter myAdapter = new ExpandableListAdapter(context, arrRO);
+        final ExpandableListView myListView = (ExpandableListView) findViewById(R.id.reminderlistView);
         myListView.setAdapter(myAdapter);
 
         //Toast.makeText(getApplicationContext(), "Reminder " + arrRO.size(), Toast.LENGTH_LONG).show();
