@@ -11,6 +11,15 @@ public class ReminderObject {
     private int Hour;
     private int Minute;
     private String completeTime;
+    private int requestCode;
+
+    public int getRequestCode() {
+        return requestCode;
+    }
+
+    public void setRequestCode(int requestCode) {
+        this.requestCode = requestCode;
+    }
 
     public String getCompleteTime() {
         return completeTime;

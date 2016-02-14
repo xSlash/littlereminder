@@ -106,36 +106,10 @@ public class MainActivity extends AppCompatActivity {
         final ExpandableListView myListView = (ExpandableListView) findViewById(R.id.reminderlistView);
         myListView.setAdapter(myAdapter);
 
-        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                //CHANGE to add view under the clicked item.
-                //parent.get
-
-                Toast.makeText(context, "AdapterView: " + parent +  ". View: " + view + ". Item: " + position, Toast.LENGTH_LONG).show();
-            }
-
-        });
-
-        /*myListView.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                        //parent.addView(findViewById(R.id.deleteButton));
-                        //arrRO.add(position, new ReminderObject("Test", 1,1, "1-1-1-1"));
-
-                        Toast.makeText(context, "Item: " + position, Toast.LENGTH_LONG).show();
-                    }
-                }
-        );*/
-        //Toast.makeText(getApplicationContext(), "Reminder " + arrRO.size(), Toast.LENGTH_LONG).show();
+        //myListView.deferNotifyDataSetChanged();
 
     }
+
 
 
     @Override

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -22,14 +23,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     public ExpandableListAdapter(Context context, ArrayList<ReminderObject> myArrayList)
     {
-        //super(context, R.layout.custom_row , myArrayList);
         this._context = context;
         this._myArrayList = myArrayList;
-        //this._myArrayListChild = myArrayListChild;
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
@@ -40,13 +39,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.custom_delete_row, null);
         }
 
-        //Should find the button
         TextView deleteButtonTV = (TextView) convertView.findViewById(R.id.deleteButton);
         deleteButtonTV.setText(_myArrayListChild);
-        /*TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.lblListItem);
 
-        txtListChild.setText(childText);*/
+
+        deleteButtonTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(_context, "Group/child: " + groupPosition + "/" + childPosition, Toast.LENGTH_LONG).show();
+            }
+        }) ;
+
+
         return convertView;
     }
 

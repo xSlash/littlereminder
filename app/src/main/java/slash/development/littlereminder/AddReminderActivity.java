@@ -1,6 +1,8 @@
 package slash.development.littlereminder;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -31,14 +33,10 @@ public class AddReminderActivity extends AppCompatActivity {
 
     private TimePicker timep;
 
-    //private ArrayList<ReminderObject> arrRO = new ArrayList<ReminderObject>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_reminder);
-
-        //arrRO = new ArrayList<ReminderObject>();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,6 +85,9 @@ public class AddReminderActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = appSharedPrefs.getString("MyObject", "");
 
+        int rqCode = appSharedPrefs.getInt("latestRequestCode", -1) + 1;
+        ro.setRequestCode(rqCode);
+
         Type type = new TypeToken<ArrayList<ReminderObject>>(){}.getType();
 
         //If first time, we don't have an object, and it will be null
@@ -130,6 +131,7 @@ public class AddReminderActivity extends AppCompatActivity {
         Gson gsonsave = new Gson();
         String jsonsave = gsonsave.toJson(arrRO);
         prefsEditor.putString("MyObject", jsonsave);
+        prefsEditor.putInt("latestRequestCode", rqCode);
         prefsEditor.commit();
 
 
@@ -148,11 +150,14 @@ public class AddReminderActivity extends AppCompatActivity {
         }
 
         Intent myIntent = new Intent(AddReminderActivity.this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(AddReminderActivity.this, 0, myIntent, 0);
+        myIntent.putExtra("id", rqCode);
+        //myIntent.put
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(AddReminderActivity.this, rqCode, myIntent, 0);
+
 
         manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
-
+        //Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + ro.getCompleteTime() + ". RQC: " + rqCode, Toast.LENGTH_LONG).show();
         Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + ro.getCompleteTime(), Toast.LENGTH_LONG).show();
 
     }
