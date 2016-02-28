@@ -5,6 +5,11 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.ScaleAnimation;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,8 +86,20 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         String completeAlarm = Integer.toString(hour) + ":" + Integer.toString(minuttes);*/
         timeTV.setText(timer);
 
+
+        if(isExpanded) {
+
+        }
+        else {
+
+        }
+
         return convertView;
     }
+
+
+
+
 
 
 

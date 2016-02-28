@@ -16,6 +16,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
@@ -160,6 +165,86 @@ public class MainActivity extends AppCompatActivity {
         ExpandableListAdapter myAdapter = new ExpandableListAdapter(context, arrRO);
         final ExpandableListView myListView = (ExpandableListView) findViewById(R.id.reminderlistView);
         myListView.setAdapter(myAdapter);
+
+        myListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+
+                //myListView.collapseGroup()
+
+                if (myListView.isGroupExpanded(groupPosition)) {
+                    //mProgAdap.prepareToCollapseGroup(groupPosition);
+                    //setupLayoutAnimationClose(groupPosition);
+                    //myListView.requestLayout();
+                    myListView.collapseGroup(groupPosition);
+                } else {
+                    boolean autoScrollToExpandedGroup = false;
+                    myListView.expandGroup(groupPosition, autoScrollToExpandedGroup);
+                    setupLayoutAnimation(groupPosition);
+                    //
+                }
+                //telling the listView we have handled the group click, and don't want the default actions.
+                return true;
+            }
+
+            private void setupLayoutAnimation(int groupPosition) {
+
+                AnimationSet set = new AnimationSet(true);
+                Animation animation = new AlphaAnimation(0.0f, 1.0f);
+                animation.setDuration(100);
+                set.addAnimation(animation);
+
+                animation = new ScaleAnimation(1.0f, 1.0f, 0.0f, 1.0f, 0.5f, 1.0f);
+                animation.setDuration(100);
+                set.addAnimation(animation);
+
+                LayoutAnimationController controller = new LayoutAnimationController(set, 0.75f);
+                myListView.setLayoutAnimationListener(null);
+                myListView.setLayoutAnimation(controller);
+
+                //myListView.setLayout
+
+                //myListView.setAnimation(set);
+
+
+            }
+
+            /*private void setupLayoutAnimationClose(final int groupPosition) {
+                AnimationSet set = new AnimationSet(true);
+                Animation animation = new AlphaAnimation(1.0f, 0.0f);
+                animation.setDuration(50);
+                animation.setFillAfter(true);
+                animation.setFillEnabled(true);
+                set.addAnimation(animation);
+                animation = new ScaleAnimation(1.0f, 1.0f, 1.0f, 0.0f, 0.5f, 0.0f);
+                animation.setDuration(50);
+                animation.setFillAfter(true);
+                animation.setFillEnabled(true);
+                set.addAnimation(animation);
+                set.setFillAfter(true);
+                set.setFillEnabled(true);
+                LayoutAnimationController controller = new LayoutAnimationController(set, 0.75f);
+                controller.setOrder(LayoutAnimationController.ORDER_REVERSE);
+                myListView.setLayoutAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        myListView.collapseGroup(groupPosition);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                myListView.setLayoutAnimation(controller);
+            }*/
+
+        });
 
         //Toast.makeText(getApplicationContext(), "Reminder " + arrRO.size(), Toast.LENGTH_LONG).show();
 

@@ -70,6 +70,8 @@ public class AddReminderActivity extends AppCompatActivity {
 
                 saveObjects(reminderObject);
 
+                finish();
+
             }
         });
 
