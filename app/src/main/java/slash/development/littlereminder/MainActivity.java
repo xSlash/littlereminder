@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
             private void setupLayoutAnimation(int groupPosition) {
 
-                AnimationSet set = new AnimationSet(true);
+                /*AnimationSet set = new AnimationSet(true);
                 Animation animation = new AlphaAnimation(0.0f, 1.0f);
                 animation.setDuration(100);
                 set.addAnimation(animation);
@@ -200,11 +201,15 @@ public class MainActivity extends AppCompatActivity {
 
                 LayoutAnimationController controller = new LayoutAnimationController(set, 0.75f);
                 myListView.setLayoutAnimationListener(null);
-                myListView.setLayoutAnimation(controller);
+                myListView.setLayoutAnimation(controller);*/
 
                 //myListView.setLayout
 
-                //myListView.setAnimation(set);
+                Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+
+                myListView.getChildAt(groupPosition).setAnimation(slide_down);
+
+                //myListView.setAnimation(slide_down);
 
 
             }
