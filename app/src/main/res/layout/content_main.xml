@@ -13,7 +13,7 @@
     tools:context="slash.development.littlereminder.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <ExpandableListView
+    <ListView
         android:groupIndicator="@null"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

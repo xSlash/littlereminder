@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
             arrRO = gson.fromJson(json, type);
         }
 
-        ExpandableListAdapter myAdapter = new ExpandableListAdapter(context, arrRO);
-        final ExpandableListView myListView = (ExpandableListView) findViewById(R.id.reminderlistView);
+        CustomAdapter myAdapter = new CustomAdapter(context, arrRO);
+        final ListView myListView = (ListView) findViewById(R.id.reminderlistView);
         myListView.setAdapter(myAdapter);
 
         //myListView.deferNotifyDataSetChanged();
@@ -163,11 +163,11 @@ public class MainActivity extends AppCompatActivity {
             arrRO = gson.fromJson(json, type);
         }
 
-        ExpandableListAdapter myAdapter = new ExpandableListAdapter(context, arrRO);
-        final ExpandableListView myListView = (ExpandableListView) findViewById(R.id.reminderlistView);
+        CustomAdapter myAdapter = new CustomAdapter(context, arrRO);
+        final ListView myListView = (ListView) findViewById(R.id.reminderlistView);
         myListView.setAdapter(myAdapter);
 
-        myListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+        /*myListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
 
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
             private void setupLayoutAnimation(int groupPosition) {
 
-                /*AnimationSet set = new AnimationSet(true);
+                AnimationSet set = new AnimationSet(true);
                 Animation animation = new AlphaAnimation(0.0f, 1.0f);
                 animation.setDuration(100);
                 set.addAnimation(animation);
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
 
                 LayoutAnimationController controller = new LayoutAnimationController(set, 0.75f);
                 myListView.setLayoutAnimationListener(null);
-                myListView.setLayoutAnimation(controller);*/
+                myListView.setLayoutAnimation(controller);
 
                 //myListView.setLayout
 
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-            /*private void setupLayoutAnimationClose(final int groupPosition) {
+            private void setupLayoutAnimationClose(final int groupPosition) {
                 AnimationSet set = new AnimationSet(true);
                 Animation animation = new AlphaAnimation(1.0f, 0.0f);
                 animation.setDuration(50);
@@ -247,9 +247,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 myListView.setLayoutAnimation(controller);
-            }*/
+            }
 
-        });
+        });*/
 
         //Toast.makeText(getApplicationContext(), "Reminder " + arrRO.size(), Toast.LENGTH_LONG).show();
 
