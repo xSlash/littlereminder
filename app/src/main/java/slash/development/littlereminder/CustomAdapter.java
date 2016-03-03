@@ -43,4 +43,6 @@ public class CustomAdapter extends ArrayAdapter<ReminderObject> {
 
         return customView;
     }
+
+
 }

@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         //myListView.deferNotifyDataSetChanged();
 
+
     }
 
 
@@ -163,9 +164,34 @@ public class MainActivity extends AppCompatActivity {
             arrRO = gson.fromJson(json, type);
         }
 
-        CustomAdapter myAdapter = new CustomAdapter(context, arrRO);
+        final CustomAdapter myAdapter = new CustomAdapter(context, arrRO);
         final ListView myListView = (ListView) findViewById(R.id.reminderlistView);
         myListView.setAdapter(myAdapter);
+
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Toast.makeText(context, "pos: " + position, Toast.LENGTH_LONG).show();
+
+                Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+                //view.setAnimation(slide_down);
+
+
+                View layout = (View) view.findViewById(R.id.DeleteRowLL);
+                layout.setVisibility(View.VISIBLE);
+                layout.setAnimation(slide_down);
+
+                /*if (layout.getVisibility() == View.INVISIBLE) {
+                    layout.setVisibility(View.VISIBLE);
+                }
+                else {
+                    layout.setVisibility(View.INVISIBLE);
+                }*/
+
+
+            }
+        });
 
         /*myListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override

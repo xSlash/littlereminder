@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
         android:text="New Button"
-        android:id="@+id/deleteButton"
+        android:id="@+id/deleteButtonOLD"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/buttonshape"
 
