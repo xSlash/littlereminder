@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +25,7 @@ import android.view.animation.LayoutAnimationController;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -67,16 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(context, AddReminderActivity.class);
                 startActivity(intent);
-
-
-                //setContentView(R.layout.activity_add_reminder);
-                /*numberofelements++;
-                remindertitles.add("Reminder " + numberofelements);
-                ListAdapter myAdapter = new CustomAdapter(context, remindertitles);
-                ListView myListView = (ListView) findViewById(R.id.reminderlistView);
-                myListView.setAdapter(myAdapter);
-
-                Toast.makeText(getApplicationContext(), "Reminder " + numberofelements, Toast.LENGTH_LONG).show();*/
 
             }
         });
@@ -168,20 +160,56 @@ public class MainActivity extends AppCompatActivity {
         final ListView myListView = (ListView) findViewById(R.id.reminderlistView);
         myListView.setAdapter(myAdapter);
 
+        final int[] zz = {0};
+
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                zz[0] = position;
 
                 Toast.makeText(context, "pos: " + position, Toast.LENGTH_LONG).show();
 
-                Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+                final Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+                final Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
                 //view.setAnimation(slide_down);
 
 
-                View layout = (View) view.findViewById(R.id.DeleteRowLL);
+                final View layout = (View) view.findViewById(R.id.DeleteRowLL);
                 layout.setVisibility(View.VISIBLE);
                 layout.setAnimation(slide_down);
 
+                /*View titleview = (View) view.findViewById(R.id.TitleRow);
+                titleview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "Radio Kappa ", Toast.LENGTH_LONG).show();
+                    }
+                });*/
+
+                Button delButton = (Button) layout.findViewById(R.id.deleteButton);
+                delButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Toast.makeText(context, "Kappa " + zz[0], Toast.LENGTH_LONG).show();
+
+                        //CHANGE HERE!
+                        /*ReminderObject tmpRO = myAdapter.getItem(position);
+                        myAdapter.remove(tmpRO);
+                        myListView.deferNotifyDataSetChanged();*/
+
+                        layout.startAnimation(slide_up);
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                // Actions to do after 10 seconds
+                                layout.setVisibility(View.GONE);
+                            }
+                        }, 1000);
+
+                    }
+                });
                 /*if (layout.getVisibility() == View.INVISIBLE) {
                     layout.setVisibility(View.VISIBLE);
                 }
@@ -192,92 +220,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        /*myListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-
-                //myListView.collapseGroup()
-
-                if (myListView.isGroupExpanded(groupPosition)) {
-                    //mProgAdap.prepareToCollapseGroup(groupPosition);
-                    //setupLayoutAnimationClose(groupPosition);
-                    //myListView.requestLayout();
-                    myListView.collapseGroup(groupPosition);
-                } else {
-                    boolean autoScrollToExpandedGroup = false;
-                    myListView.expandGroup(groupPosition, autoScrollToExpandedGroup);
-                    setupLayoutAnimation(groupPosition);
-                    //
-                }
-                //telling the listView we have handled the group click, and don't want the default actions.
-                return true;
-            }
-
-            private void setupLayoutAnimation(int groupPosition) {
-
-                AnimationSet set = new AnimationSet(true);
-                Animation animation = new AlphaAnimation(0.0f, 1.0f);
-                animation.setDuration(100);
-                set.addAnimation(animation);
-
-                animation = new ScaleAnimation(1.0f, 1.0f, 0.0f, 1.0f, 0.5f, 1.0f);
-                animation.setDuration(100);
-                set.addAnimation(animation);
-
-                LayoutAnimationController controller = new LayoutAnimationController(set, 0.75f);
-                myListView.setLayoutAnimationListener(null);
-                myListView.setLayoutAnimation(controller);
-
-                //myListView.setLayout
-
-                Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
-
-                myListView.getChildAt(groupPosition).setAnimation(slide_down);
-
-                //myListView.setAnimation(slide_down);
-
-
-            }
-
-            private void setupLayoutAnimationClose(final int groupPosition) {
-                AnimationSet set = new AnimationSet(true);
-                Animation animation = new AlphaAnimation(1.0f, 0.0f);
-                animation.setDuration(50);
-                animation.setFillAfter(true);
-                animation.setFillEnabled(true);
-                set.addAnimation(animation);
-                animation = new ScaleAnimation(1.0f, 1.0f, 1.0f, 0.0f, 0.5f, 0.0f);
-                animation.setDuration(50);
-                animation.setFillAfter(true);
-                animation.setFillEnabled(true);
-                set.addAnimation(animation);
-                set.setFillAfter(true);
-                set.setFillEnabled(true);
-                LayoutAnimationController controller = new LayoutAnimationController(set, 0.75f);
-                controller.setOrder(LayoutAnimationController.ORDER_REVERSE);
-                myListView.setLayoutAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        myListView.collapseGroup(groupPosition);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                myListView.setLayoutAnimation(controller);
-            }
-
-        });*/
-
-        //Toast.makeText(getApplicationContext(), "Reminder " + arrRO.size(), Toast.LENGTH_LONG).show();
 
     }
 }
