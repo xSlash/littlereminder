@@ -92,6 +92,12 @@ public class AddReminderActivity extends AppCompatActivity {
 
         Type type = new TypeToken<ArrayList<ReminderObject>>(){}.getType();
 
+
+
+
+
+
+        //Add to our stored objects
         //If first time, we don't have an object, and it will be null
         if (gson.fromJson(json, type) == null) {
 
@@ -128,6 +134,9 @@ public class AddReminderActivity extends AppCompatActivity {
         //Save objects
 
         //arrRO.add(ro);
+
+
+
 
         SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
         Gson gsonsave = new Gson();

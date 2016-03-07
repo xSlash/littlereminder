@@ -1,5 +1,6 @@
 package slash.development.littlereminder;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,6 +40,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -194,11 +196,22 @@ public class MainActivity extends AppCompatActivity {
                         //Toast.makeText(context, "Kappa " + zz[0], Toast.LENGTH_LONG).show();
 
                         //CHANGE HERE!
-                        /*ReminderObject tmpRO = myAdapter.getItem(position);
-                        myAdapter.remove(tmpRO);
-                        myListView.deferNotifyDataSetChanged();*/
+                        ArrayList<ReminderObject> tmparrRO = getSavedObjects();
 
-                        layout.startAnimation(slide_up);
+                        //Cancel the alarm of the object
+                        cancelAlarm(tmparrRO.get(position));
+
+                        //Remove from the actual stored objects (behind the scenes)
+                        tmparrRO.remove(position);
+                        saveObjects(tmparrRO);
+
+                        //Remove from the viewable list (immediate effect)
+                        myAdapter.remove(myAdapter.getItem(position));
+                        myListView.deferNotifyDataSetChanged();
+
+
+                        //Slide up animation. Handler for making View invisible after animation
+                        /*layout.startAnimation(slide_up);
 
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
@@ -206,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                                 // Actions to do after 10 seconds
                                 layout.setVisibility(View.GONE);
                             }
-                        }, 1000);
+                        }, 1000);*/
 
                     }
                 });
@@ -221,5 +234,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public ArrayList<ReminderObject> getSavedObjects() {
+
+        ArrayList<ReminderObject> arrRO = new ArrayList<ReminderObject>();
+
+        //Load objects
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
+        Gson gson = new Gson();
+        String json = appSharedPrefs.getString("MyObject", "");
+
+        Type type = new TypeToken<ArrayList<ReminderObject>>(){}.getType();
+
+        //If first time, we don't have an object, and it will be null
+        if (gson.fromJson(json, type) == null) {
+
+        }
+        //Else, assign it to arrRO
+        else {
+            arrRO = gson.fromJson(json, type);
+        }
+
+        return arrRO;
+    }
+
+    public void saveObjects(ArrayList<ReminderObject> arrRO) {
+
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
+        SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
+        Gson gsonsave = new Gson();
+        String jsonsave = gsonsave.toJson(arrRO);
+        prefsEditor.putString("MyObject", jsonsave);
+        //prefsEditor.putInt("latestRequestCode", rqCode);
+        prefsEditor.commit();
+    }
+
+    public void cancelAlarm(ReminderObject ro) {
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        manager.cancel(ro.getPendingIntent());
     }
 }

@@ -1,5 +1,7 @@
 package slash.development.littlereminder;
 
+import android.app.PendingIntent;
+
 import java.sql.Time;
 
 /**
@@ -12,6 +14,15 @@ public class ReminderObject {
     private int Minute;
     private String completeTime;
     private int requestCode;
+    private PendingIntent pendingIntent;
+
+    public PendingIntent getPendingIntent() {
+        return pendingIntent;
+    }
+
+    public void setPendingIntent(PendingIntent pendingIntent) {
+        this.pendingIntent = pendingIntent;
+    }
 
     public int getRequestCode() {
         return requestCode;
