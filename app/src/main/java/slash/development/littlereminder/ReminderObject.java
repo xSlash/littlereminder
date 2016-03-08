@@ -16,14 +16,6 @@ public class ReminderObject {
     private int requestCode;
     private PendingIntent pendingIntent;
 
-    public PendingIntent getPendingIntent() {
-        return pendingIntent;
-    }
-
-    public void setPendingIntent(PendingIntent pendingIntent) {
-        this.pendingIntent = pendingIntent;
-    }
-
     public int getRequestCode() {
         return requestCode;
     }

@@ -1,6 +1,7 @@
 package slash.development.littlereminder;
 
 import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -276,6 +277,11 @@ public class MainActivity extends AppCompatActivity {
 
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        manager.cancel(ro.getPendingIntent());
+        int rqCode = ro.getRequestCode();
+        Intent myIntent = new Intent(this.getApplicationContext(), AlarmReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), rqCode, myIntent, 0);
+
+        manager.cancel(pendingIntent);
     }
 }

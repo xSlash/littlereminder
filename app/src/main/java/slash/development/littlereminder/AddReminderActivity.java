@@ -31,6 +31,12 @@ import java.util.Calendar;
 
 public class AddReminderActivity extends AppCompatActivity {
 
+    private static Context context;
+
+    public static Context getARContext() {
+        return AddReminderActivity.context;
+
+    }
     private TimePicker timep;
 
     @Override
@@ -138,12 +144,7 @@ public class AddReminderActivity extends AppCompatActivity {
 
 
 
-        SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
-        Gson gsonsave = new Gson();
-        String jsonsave = gsonsave.toJson(arrRO);
-        prefsEditor.putString("MyObject", jsonsave);
-        prefsEditor.putInt("latestRequestCode", rqCode);
-        prefsEditor.commit();
+
 
 
 
@@ -160,10 +161,10 @@ public class AddReminderActivity extends AppCompatActivity {
             calendar.add(Calendar.DATE, 1);
         }
 
-        Intent myIntent = new Intent(AddReminderActivity.this, AlarmReceiver.class);
+        Intent myIntent = new Intent(this.getApplicationContext(), AlarmReceiver.class);
         myIntent.putExtra("id", rqCode);
         //myIntent.put
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(AddReminderActivity.this, rqCode, myIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), rqCode, myIntent, 0);
 
 
         manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
@@ -171,6 +172,13 @@ public class AddReminderActivity extends AppCompatActivity {
         //Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + ro.getCompleteTime() + ". RQC: " + rqCode, Toast.LENGTH_LONG).show();
         Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + ro.getCompleteTime(), Toast.LENGTH_LONG).show();
 
+
+        SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
+        Gson gsonsave = new Gson();
+        String jsonsave = gsonsave.toJson(arrRO);
+        prefsEditor.putString("MyObject", jsonsave);
+        prefsEditor.putInt("latestRequestCode", rqCode);
+        prefsEditor.commit();
     }
 
 }
