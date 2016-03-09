@@ -30,10 +30,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -171,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
                 zz[0] = position;
 
-                Toast.makeText(context, "pos: " + position, Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "pos: " + position, Toast.LENGTH_LONG).show();
 
                 final Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
                 final Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
@@ -182,19 +184,41 @@ public class MainActivity extends AppCompatActivity {
                 layout.setVisibility(View.VISIBLE);
                 layout.setAnimation(slide_down);
 
-                /*View titleview = (View) view.findViewById(R.id.TitleRow);
-                titleview.setOnClickListener(new View.OnClickListener() {
+
+                LinearLayout titleLayout = (LinearLayout) view.findViewById(R.id.TitleRow);
+                titleLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "Radio Kappa ", Toast.LENGTH_LONG).show();
+
+                        if (layout.getVisibility() == View.VISIBLE) {
+                            layout.startAnimation(slide_up);
+
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    // Actions to do after 1 seconds
+                                    layout.setVisibility(View.GONE);
+                                }
+                            }, 500);
+                        }
+                        else {
+                            layout.setVisibility(View.VISIBLE);
+                            layout.startAnimation(slide_down);
+
+
+
+                        }
+
                     }
-                });*/
+                });
 
                 Button delButton = (Button) layout.findViewById(R.id.deleteButton);
                 delButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //Toast.makeText(context, "Kappa " + zz[0], Toast.LENGTH_LONG).show();
+
+
 
                         //CHANGE HERE!
                         ArrayList<ReminderObject> tmparrRO = getSavedObjects();
@@ -269,7 +293,6 @@ public class MainActivity extends AppCompatActivity {
         Gson gsonsave = new Gson();
         String jsonsave = gsonsave.toJson(arrRO);
         prefsEditor.putString("MyObject", jsonsave);
-        //prefsEditor.putInt("latestRequestCode", rqCode);
         prefsEditor.commit();
     }
 
