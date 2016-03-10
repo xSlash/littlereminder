@@ -27,17 +27,12 @@ public class CustomAdapter extends ArrayAdapter<ReminderObject> {
         View customView = layoutInflater.inflate(R.layout.custom_row, parent, false);
 
         String title = getItem(position).getTitle();
-        //String timer = Integer.toString(getItem(position).getHour()) + ":" + Integer.toString(getItem(position).getMinute());
         String timer = getItem(position).getCompleteTime();
 
         TextView titleTV = (TextView) customView.findViewById(R.id.reminderTitle);
         TextView timeTV = (TextView) customView.findViewById(R.id.reminderTime);
 
         titleTV.setText(title);
-        /*Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR);
-        int minuttes = c.get(Calendar.MINUTE);
-        String completeAlarm = Integer.toString(hour) + ":" + Integer.toString(minuttes);*/
         timeTV.setText(timer);
 
 

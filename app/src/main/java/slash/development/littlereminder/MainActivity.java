@@ -47,12 +47,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<String> remindertitles;
-    private int numberofelements = 0;
     private final Context context = this;
-
-    //private class thisClass = getClas
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        remindertitles = new ArrayList<String>();
-
         floatButton = (ImageButton) findViewById(R.id.imageButton);
         floatButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,13 +71,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        generateAlarmList();
+        ArrayList<ReminderObject> arrRO = new ArrayList<ReminderObject>();
+        arrRO = loadAlarmList();
 
-
+        CustomAdapter myAdapter = new CustomAdapter(context, arrRO);
+        final ListView myListView = (ListView) findViewById(R.id.reminderlistView);
+        myListView.setAdapter(myAdapter);
 
     }
 
-    public void generateAlarmList() {
+    public ArrayList<ReminderObject> loadAlarmList() {
 
         ArrayList<ReminderObject> arrRO = new ArrayList<ReminderObject>();
 
@@ -100,20 +96,13 @@ public class MainActivity extends AppCompatActivity {
         if (gson.fromJson(json, type) == null) {
 
         }
-        //Else, assign it to arrRO
+        //Else, assign it to arrRO (ArrayReminderObjects
         else {
             arrRO = gson.fromJson(json, type);
         }
 
-        CustomAdapter myAdapter = new CustomAdapter(context, arrRO);
-        final ListView myListView = (ListView) findViewById(R.id.reminderlistView);
-        myListView.setAdapter(myAdapter);
-
-        //myListView.deferNotifyDataSetChanged();
-
-
+        return arrRO;
     }
-
 
 
     @Override
@@ -144,22 +133,8 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<ReminderObject> arrRO = new ArrayList<ReminderObject>();
 
-        //Load objects
-        SharedPreferences appSharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this.getApplicationContext());
-        Gson gson = new Gson();
-        String json = appSharedPrefs.getString("MyObject", "");
+        arrRO = loadAlarmList();
 
-        Type type = new TypeToken<ArrayList<ReminderObject>>(){}.getType();
-
-        //If first time, we don't have an object, and it will be null
-        if (gson.fromJson(json, type) == null) {
-
-        }
-        //Else, assign it to arrRO
-        else {
-            arrRO = gson.fromJson(json, type);
-        }
 
         final CustomAdapter myAdapter = new CustomAdapter(context, arrRO);
         final ListView myListView = (ListView) findViewById(R.id.reminderlistView);
@@ -173,12 +148,9 @@ public class MainActivity extends AppCompatActivity {
 
                 zz[0] = position;
 
-                //Toast.makeText(context, "pos: " + position, Toast.LENGTH_LONG).show();
-
+                //Create animations from xml files.
                 final Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
                 final Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
-                //view.setAnimation(slide_down);
-
 
                 final View layout = (View) view.findViewById(R.id.DeleteRowLL);
                 layout.setVisibility(View.VISIBLE);
@@ -196,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 public void run() {
-                                    // Actions to do after 1 seconds
+                                    //Remove view after 1 sec
                                     layout.setVisibility(View.GONE);
                                 }
                             }, 500);
@@ -205,23 +177,18 @@ public class MainActivity extends AppCompatActivity {
                             layout.setVisibility(View.VISIBLE);
                             layout.startAnimation(slide_down);
 
-
-
                         }
 
                     }
                 });
 
+                //Delete button pressed
                 Button delButton = (Button) layout.findViewById(R.id.deleteButton);
                 delButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Toast.makeText(context, "Kappa " + zz[0], Toast.LENGTH_LONG).show();
 
-
-
-                        //CHANGE HERE!
-                        ArrayList<ReminderObject> tmparrRO = getSavedObjects();
+                        ArrayList<ReminderObject> tmparrRO = loadAlarmList();
 
                         //Cancel the alarm of the object
                         cancelAlarm(tmparrRO.get(position));
@@ -234,55 +201,12 @@ public class MainActivity extends AppCompatActivity {
                         myAdapter.remove(myAdapter.getItem(position));
                         myListView.deferNotifyDataSetChanged();
 
-
-                        //Slide up animation. Handler for making View invisible after animation
-                        /*layout.startAnimation(slide_up);
-
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                // Actions to do after 10 seconds
-                                layout.setVisibility(View.GONE);
-                            }
-                        }, 1000);*/
-
                     }
-                });
-                /*if (layout.getVisibility() == View.INVISIBLE) {
-                    layout.setVisibility(View.VISIBLE);
-                }
-                else {
-                    layout.setVisibility(View.INVISIBLE);
-                }*/
-
+                }); //End of delButton
 
             }
         });
 
-    }
-
-    public ArrayList<ReminderObject> getSavedObjects() {
-
-        ArrayList<ReminderObject> arrRO = new ArrayList<ReminderObject>();
-
-        //Load objects
-        SharedPreferences appSharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this.getApplicationContext());
-        Gson gson = new Gson();
-        String json = appSharedPrefs.getString("MyObject", "");
-
-        Type type = new TypeToken<ArrayList<ReminderObject>>(){}.getType();
-
-        //If first time, we don't have an object, and it will be null
-        if (gson.fromJson(json, type) == null) {
-
-        }
-        //Else, assign it to arrRO
-        else {
-            arrRO = gson.fromJson(json, type);
-        }
-
-        return arrRO;
     }
 
     public void saveObjects(ArrayList<ReminderObject> arrRO) {

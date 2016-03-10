@@ -29,10 +29,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        //MainActivity.getTextView2().setText("Enough Rest. Do Work Now!");
 
-        /*Long tsLong = System.currentTimeMillis()/1000;
-        String ts = tsLong.toString();*/
+        //Get the request code
         int rqcode = intent.getExtras().getInt("id");
 
         //Find stored ReminderObject array
@@ -45,7 +43,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         Type type = new TypeToken<ArrayList<ReminderObject>>(){}.getType();
         arrRO = gson.fromJson(json, type);
 
-        //Find the object which match the intent
+        //Find the object which match the request code
         int matchedObject = 0;
 
         for (int i = 0; i < arrRO.size(); i++) {
@@ -69,10 +67,10 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         notificationManager.notify(0, noti);
 
-        //Alarm sound
-        /*Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        //Alarm sound. Comment this out, for just having the notification.
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
-        ringtone.play();*/
+        ringtone.play();
 
 
 

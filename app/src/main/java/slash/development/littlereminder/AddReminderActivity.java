@@ -67,14 +67,12 @@ public class AddReminderActivity extends AppCompatActivity {
 
                 TextView textView = (TextView) findViewById(R.id.titleEditText);
                 String title = textView.getText().toString();
-                //textView.setText(hour + ":" + min);
 
                 String completeTime = new DecimalFormat("00").format(hour) + ":" + new DecimalFormat("00").format(min);
-                //String minuteFormat = new DecimalFormat("00").format(min);
 
                 ReminderObject reminderObject = new ReminderObject(title, hour, min, completeTime);
 
-                saveObjects(reminderObject);
+                addAlarmToList(reminderObject);
 
                 finish();
 
@@ -83,7 +81,7 @@ public class AddReminderActivity extends AppCompatActivity {
 
     }
 
-    private void saveObjects(ReminderObject ro) {
+    private void addAlarmToList(ReminderObject ro) {
 
         ArrayList<ReminderObject> arrRO = new ArrayList<ReminderObject>();
 
@@ -97,10 +95,6 @@ public class AddReminderActivity extends AppCompatActivity {
         ro.setRequestCode(rqCode);
 
         Type type = new TypeToken<ArrayList<ReminderObject>>(){}.getType();
-
-
-
-
 
 
         //Add to our stored objects
@@ -136,49 +130,52 @@ public class AddReminderActivity extends AppCompatActivity {
             arrRO.add(ro);
         }
 
+        //Set the alarm
+        setAlarm(rqCode, ro);
 
-        //Save objects
-
-        //arrRO.add(ro);
-
-
-
+        //Store the alarm
+        storeAlarms(arrRO, rqCode);
 
 
+    }
 
+    public void storeAlarms(ArrayList<ReminderObject> arrRO, int rqCode) {
 
-
-        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Calendar calendar = Calendar.getInstance();
-        Calendar now = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, ro.getHour());
-        calendar.set(Calendar.MINUTE, ro.getMinute());
-        calendar.set(Calendar.SECOND, 0);
-        //calendar.set(Calendar.MILLISECOND, 0);
-
-        if(calendar.before(now)){
-            calendar.add(Calendar.DATE, 1);
-        }
-
-        Intent myIntent = new Intent(this.getApplicationContext(), AlarmReceiver.class);
-        myIntent.putExtra("id", rqCode);
-        //myIntent.put
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), rqCode, myIntent, 0);
-
-
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-
-        //Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + ro.getCompleteTime() + ". RQC: " + rqCode, Toast.LENGTH_LONG).show();
-        Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + ro.getCompleteTime(), Toast.LENGTH_LONG).show();
-
-
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
         SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
         Gson gsonsave = new Gson();
         String jsonsave = gsonsave.toJson(arrRO);
         prefsEditor.putString("MyObject", jsonsave);
         prefsEditor.putInt("latestRequestCode", rqCode);
         prefsEditor.commit();
+    }
+
+    public void setAlarm(int rqCode, ReminderObject ro) {
+
+        //Create alarm manager
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        //Setting the time the alarm should go off
+        Calendar calendar = Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, ro.getHour());
+        calendar.set(Calendar.MINUTE, ro.getMinute());
+        calendar.set(Calendar.SECOND, 0);
+
+        //If the time set is past for the day, set for next day.
+        if(calendar.before(now)){
+            calendar.add(Calendar.DATE, 1);
+        }
+
+        Intent myIntent = new Intent(this.getApplicationContext(), AlarmReceiver.class);
+        myIntent.putExtra("id", rqCode);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), rqCode, myIntent, 0);
+
+        //Setting the alarm every day - Notice INTERVAL_DAY.
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        Toast.makeText(this, "Alarm set: " + ro.getTitle() + " - " + ro.getCompleteTime(), Toast.LENGTH_LONG).show();
     }
 
 }
